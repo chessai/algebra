@@ -26,7 +26,7 @@ import Control.Applicative
 import Control.Monad
 import Data.Functor.Plus hiding (zero)
 import qualified Data.Functor.Plus as Plus
-import Data.Functor.Bind
+import Data.Functor.Semimonad
 import Prelude hiding ((+),(-),negate,subtract,replicate,(*))
 
 -- | Linear functionals from elements of an (infinite) free module to a scalar
@@ -40,14 +40,14 @@ newtype Covector r a = Covector { ($*) :: (a -> r) -> r }
 instance Functor (Covector r) where
   fmap f m = Covector $ \k -> m $* k . f
 
-instance Apply (Covector r) where
+instance Semiapplicative (Covector r) where
   mf <.> ma = Covector $ \k -> mf $* \f -> ma $* k . f
 
 instance Applicative (Covector r) where
   pure a = Covector $ \k -> k a
   mf <*> ma = Covector $ \k -> mf $* \f -> ma $* k . f
 
-instance Bind (Covector r) where
+instance Semimonad (Covector r) where
   m >>- f = Covector $ \k -> m $* \a -> f a $* k
   
 instance Monad (Covector r) where

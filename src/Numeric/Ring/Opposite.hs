@@ -5,8 +5,8 @@ module Numeric.Ring.Opposite
 
 import Data.Foldable
 import Data.Function (on)
-import Data.Semigroup.Foldable
-import Data.Semigroup.Traversable
+import Data.Semigroup.Semifoldable
+import Data.Semigroup.Semitraversable
 import Data.Traversable
 import Numeric.Algebra
 import Numeric.Decidable.Associates
@@ -26,10 +26,10 @@ instance Foldable Opposite where
   foldMap f (Opposite r) = f r
 instance Traversable Opposite where
   traverse f (Opposite r) = fmap Opposite (f r)
-instance Foldable1 Opposite where
-  foldMap1 f (Opposite r) = f r
-instance Traversable1 Opposite where
-  traverse1 f (Opposite r) = fmap Opposite (f r)
+instance Semifoldable Opposite where
+  semifoldMap f (Opposite r) = f r
+instance Semitraversable Opposite where
+  semitraverse f (Opposite r) = fmap Opposite (f r)
 instance Additive r => Additive (Opposite r) where
   Opposite a + Opposite b = Opposite (a + b)
   sinnum1p n (Opposite a) = Opposite (sinnum1p n a)

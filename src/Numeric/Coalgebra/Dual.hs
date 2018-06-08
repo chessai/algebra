@@ -10,12 +10,12 @@ import Control.Applicative
 import Control.Monad.Reader.Class
 import Data.Data
 import Data.Distributive
-import Data.Functor.Bind
+import Data.Functor.Semimonad
 import Data.Functor.Rep
 import Data.Foldable
 import Data.Ix
-import Data.Semigroup.Traversable
-import Data.Semigroup.Foldable
+import Data.Semigroup.Semitraversable
+import Data.Semigroup.Semifoldable
 import Data.Semigroup
 import Data.Traversable
 import Numeric.Algebra
@@ -59,14 +59,14 @@ instance Distributive Dual' where
 instance Functor Dual' where
   fmap f (Dual' a b) = Dual' (f a) (f b)
 
-instance Apply Dual' where
+instance Semiapplicative Dual' where
   (<.>) = apRep
 
 instance Applicative Dual' where
   pure = pureRep
   (<*>) = apRep 
 
-instance Bind Dual' where
+instance Semimonad Dual' where
   (>>-) = bindRep
 
 instance Monad Dual' where
@@ -83,11 +83,11 @@ instance Foldable Dual' where
 instance Traversable Dual' where
   traverse f (Dual' a b) = Dual' <$> f a <*> f b
 
-instance Foldable1 Dual' where
-  foldMap1 f (Dual' a b) = f a <> f b
+instance Semifoldable Dual' where
+  semifoldMap f (Dual' a b) = f a <> f b
 
-instance Traversable1 Dual' where
-  traverse1 f (Dual' a b) = Dual' <$> f a <.> f b
+instance Semitraversable Dual' where
+  semitraverse f (Dual' a b) = Dual' <$> f a <.> f b
 
 instance Additive r => Additive (Dual' r) where
   (+) = addRep 

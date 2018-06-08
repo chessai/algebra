@@ -38,7 +38,7 @@ instance Group r => Group (ZeroRng r) where
 instance Monoidal r => Multiplicative (ZeroRng r) where
   _ * _ = zero
   productWith1 f as = case toList as of
-    [] -> error "productWith1: empty Foldable1"
+    [] -> error "productWith1: empty Semifoldable"
     [a] -> f a
     _   -> zero
 

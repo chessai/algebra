@@ -9,12 +9,12 @@ import Control.Applicative
 import Control.Monad.Reader.Class
 import Data.Data
 import Data.Distributive
-import Data.Functor.Bind
+import Data.Functor.Semimonad
 import Data.Functor.Rep
 import Data.Foldable
 import Data.Ix
-import Data.Semigroup.Traversable
-import Data.Semigroup.Foldable
+import Data.Semigroup.Semitraversable
+import Data.Semigroup.Semifoldable
 import Data.Semigroup
 import Data.Traversable
 import Numeric.Algebra
@@ -52,14 +52,14 @@ instance Distributive Hyper where
 instance Functor Hyper where
   fmap f (Hyper a b) = Hyper (f a) (f b)
 
-instance Apply Hyper where
+instance Semiapplicative Hyper where
   (<.>) = apRep
 
 instance Applicative Hyper where
   pure = pureRep
   (<*>) = apRep 
 
-instance Bind Hyper where
+instance Semimonad Hyper where
   (>>-) = bindRep
 
 instance Monad Hyper where
@@ -76,11 +76,11 @@ instance Foldable Hyper where
 instance Traversable Hyper where
   traverse f (Hyper a b) = Hyper <$> f a <*> f b
 
-instance Foldable1 Hyper where
-  foldMap1 f (Hyper a b) = f a <> f b
+instance Semifoldable Hyper where
+  semifoldMap f (Hyper a b) = f a <> f b
 
-instance Traversable1 Hyper where
-  traverse1 f (Hyper a b) = Hyper <$> f a <.> f b
+instance Semitraversable Hyper where
+  semitraverse f (Hyper a b) = Hyper <$> f a <.> f b
 
 instance Additive r => Additive (Hyper r) where
   (+) = addRep 

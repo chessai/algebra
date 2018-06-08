@@ -20,12 +20,12 @@ import Control.Monad.Reader.Class
 import Data.Ix hiding (index)
 import Data.Data
 import Data.Distributive
-import Data.Functor.Bind
+import Data.Functor.Semimonad
 import Data.Functor.Rep
 import Data.Foldable
 import Data.Traversable
-import Data.Semigroup.Traversable
-import Data.Semigroup.Foldable
+import Data.Semigroup.Semitraversable
+import Data.Semigroup.Semifoldable
 import Data.Semigroup
 import Numeric.Algebra
 import Numeric.Algebra.Distinguished.Class
@@ -87,14 +87,14 @@ instance Distributive Quaternion' where
 instance Functor Quaternion' where
   fmap = fmapRep
 
-instance Apply Quaternion' where
+instance Semiapplicative Quaternion' where
   (<.>) = apRep
 
 instance Applicative Quaternion' where
   pure = pureRep
   (<*>) = apRep
 
-instance Bind Quaternion' where
+instance Semimonad Quaternion' where
   (>>-) = bindRep
 
 instance Monad Quaternion' where
@@ -113,12 +113,12 @@ instance Traversable Quaternion' where
   traverse f (Quaternion' a b c d) =
     Quaternion' <$> f a <*> f b <*> f c <*> f d
 
-instance Foldable1 Quaternion' where
-  foldMap1 f (Quaternion' a b c d) =
+instance Semifoldable Quaternion' where
+  semifoldMap f (Quaternion' a b c d) =
     f a <> f b <> f c <> f d
 
-instance Traversable1 Quaternion' where
-  traverse1 f (Quaternion' a b c d) =
+instance Semitraversable Quaternion' where
+  semitraverse f (Quaternion' a b c d) =
     Quaternion' <$> f a <.> f b <.> f c <.> f d
 
 instance Additive r => Additive (Quaternion' r) where

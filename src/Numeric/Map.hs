@@ -18,7 +18,7 @@ import Control.Category
 import Control.Monad
 import Control.Monad.Reader.Class
 import Data.Functor.Rep
-import Data.Functor.Bind
+import Data.Functor.Semimonad
 import Data.Functor.Plus hiding (zero)
 import qualified Data.Functor.Plus as Plus
 import Data.Semigroupoid
@@ -60,14 +60,14 @@ instance Semigroupoid (Map r) where
 instance Functor (Map r b) where
   fmap f m = Map $ \k -> m $# k . f
 
-instance Apply (Map r b) where
+instance Semiapplicative (Map r b) where
   mf <.> ma = Map $ \k b -> (mf $# \f -> (ma $# k . f) b) b
 
 instance Applicative (Map r b) where
   pure a = Map $ \k _ -> k a
   mf <*> ma = Map $ \k b -> (mf $# \f -> (ma $# k . f) b) b
 
-instance Bind (Map r b) where
+instance Semimonad (Map r b) where
   Map m >>- f = Map $ \k b -> m (\a -> (f a $# k) b) b
 
 instance Monad (Map r b) where

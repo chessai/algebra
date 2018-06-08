@@ -14,12 +14,12 @@ import Control.Applicative
 import Control.Monad.Reader.Class
 import Data.Data
 import Data.Distributive
-import Data.Functor.Bind
+import Data.Functor.Semimonad
 import Data.Functor.Rep
 import Data.Foldable
 import Data.Ix
-import Data.Semigroup.Traversable
-import Data.Semigroup.Foldable
+import Data.Semigroup.Semitraversable
+import Data.Semigroup.Semifoldable
 import Data.Semigroup
 import Data.Traversable
 import Numeric.Algebra
@@ -77,14 +77,14 @@ instance Distributive Trig where
 instance Functor Trig where
   fmap f (Trig a b) = Trig (f a) (f b)
 
-instance Apply Trig where
+instance Semiapplicative Trig where
   (<.>) = apRep
 
 instance Applicative Trig where
   pure = pureRep
   (<*>) = apRep 
 
-instance Bind Trig where
+instance Semimonad Trig where
   (>>-) = bindRep
 
 instance Monad Trig where
@@ -101,11 +101,11 @@ instance Foldable Trig where
 instance Traversable Trig where
   traverse f (Trig a b) = Trig <$> f a <*> f b
 
-instance Foldable1 Trig where
-  foldMap1 f (Trig a b) = f a <> f b
+instance Semifoldable Trig where
+  semifoldMap f (Trig a b) = f a <> f b
 
-instance Traversable1 Trig where
-  traverse1 f (Trig a b) = Trig <$> f a <.> f b
+instance Semitraversable Trig where
+  semitraverse f (Trig a b) = Trig <$> f a <.> f b
 
 instance Additive r => Additive (Trig r) where
   (+) = addRep 

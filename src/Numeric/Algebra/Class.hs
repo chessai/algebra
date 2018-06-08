@@ -27,9 +27,9 @@ import Data.IntMap (IntMap)
 import Data.IntSet (IntSet)
 import Data.Map (Map)
 import Data.Monoid (mappend)
--- import Data.Semigroup.Foldable
+-- import Data.Semigroup.Semifoldable
 import Data.Sequence hiding (reverse,index)
-import Data.Semigroup.Foldable
+import Data.Semigroup.Semifoldable
 import Data.Set (Set)
 import Data.Word
 import Numeric.Additive.Class
@@ -63,13 +63,13 @@ class Multiplicative r where
       | otherwise = g (x * x) ((y Prelude.- 1) `quot` 2) (x * z)
 
 -- class PowerAssociative r => Assocative r where
-  productWith1 :: Foldable1 f => (a -> r) -> f a -> r
+  productWith1 :: Semifoldable f => (a -> r) -> f a -> r
   productWith1 f = maybe (error "Numeric.Multiplicative.Semigroup.productWith1: empty structure") id . foldl' mf Nothing
     where 
       mf Nothing y = Just $! f y
       mf (Just x) y = Just $! x * f y
 
-product1 :: (Foldable1 f, Multiplicative r) => f r -> r
+product1 :: (Semifoldable f, Multiplicative r) => f r -> r
 product1 = productWith1 id
 
 pow1pIntegral :: (Integral r, Integral n) => r -> n -> r

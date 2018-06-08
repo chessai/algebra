@@ -16,7 +16,7 @@ module Numeric.Additive.Class
 import Data.Int
 import Data.Word
 import Data.Foldable hiding (concat)
-import Data.Semigroup.Foldable
+import Data.Semigroup.Semifoldable
 import Numeric.Natural
 import Prelude ((-),Bool(..),($),id,(>>=),fromIntegral,(*),otherwise,quot,maybe,error,even,Maybe(..),(==),(.),($!),Integer,(||),pred)
 import qualified Prelude
@@ -45,12 +45,12 @@ class Additive r where
         | y == 1 = x + z
         | otherwise = g (x + x) (pred y `quot` 2) (x + z)
 
-  sumWith1 :: Foldable1 f => (a -> r) -> f a -> r
+  sumWith1 :: Semifoldable f => (a -> r) -> f a -> r
   sumWith1 f = maybe (error "Numeric.Additive.Semigroup.sumWith1: empty structure") id . foldl' mf Nothing
      where mf Nothing y = Just $! f y 
            mf (Just x) y = Just $! x + f y
 
-sum1 :: (Foldable1 f, Additive r) => f r -> r
+sum1 :: (Semifoldable f, Additive r) => f r -> r
 sum1 = sumWith1 id
 
 instance Additive r => Additive (b -> r) where

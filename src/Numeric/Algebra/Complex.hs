@@ -18,13 +18,13 @@ import Control.Applicative
 import Control.Monad.Reader.Class
 import Data.Data
 import Data.Distributive
-import Data.Functor.Bind
+import Data.Functor.Semimonad
 import Data.Functor.Rep
 import Data.Foldable
 import Data.Ix hiding (index)
 import Data.Semigroup
-import Data.Semigroup.Traversable
-import Data.Semigroup.Foldable
+import Data.Semigroup.Semitraversable
+import Data.Semigroup.Semifoldable
 import Data.Traversable
 import Numeric.Algebra
 import Numeric.Algebra.Distinguished.Class
@@ -74,14 +74,14 @@ instance Distributive Complex where
 instance Functor Complex where
   fmap f (Complex a b) = Complex (f a) (f b)
 
-instance Apply Complex where
+instance Semiapplicative Complex where
   (<.>) = apRep
 
 instance Applicative Complex where
   pure = pureRep
   (<*>) = apRep 
 
-instance Bind Complex where
+instance Semimonad Complex where
   (>>-) = bindRep
 
 instance Monad Complex where
@@ -98,11 +98,11 @@ instance Foldable Complex where
 instance Traversable Complex where
   traverse f (Complex a b) = Complex <$> f a <*> f b
 
-instance Foldable1 Complex where
-  foldMap1 f (Complex a b) = f a <> f b
+instance Semifoldable Complex where
+  semifoldMap f (Complex a b) = f a <> f b
 
-instance Traversable1 Complex where
-  traverse1 f (Complex a b) = Complex <$> f a <.> f b
+instance Semitraversable Complex where
+  semitraverse f (Complex a b) = Complex <$> f a <.> f b
 
 instance Additive r => Additive (Complex r) where
   (+) = addRep 
